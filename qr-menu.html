@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dastarkhan | Дастархан</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A96E;
+    --gold-light: #E8D5A3;
+    --dark: #0D0A07;
+    --surface: #13100C;
+    --card: #1A1612;
+    --border: rgba(201,169,110,0.18);
+    --text: #F0EAE0;
+    --muted: #8A7E6E;
+    --accent: #C9A96E;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,169,110,0.08) 0%, transparent 70%),
+      var(--dark);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(201,169,110,0.04) 80px),
+      repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(201,169,110,0.04) 80px);
+    pointer-events: none;
+  }
+
+  .ornament {
+    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    opacity: 0.7;
+  }
+
+  .hero-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    margin-bottom: 0.3rem;
+  }
+
+  .hero-name span {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .hero-sub {
+    font-size: 0.78rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+  }
+
+  .lang-toggle {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+  }
+
+  .lang-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.55rem 1.4rem;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+
+  .lang-btn.active {
+    background: var(--gold);
+    color: var(--dark);
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    animation: fadeUpDown 2s infinite;
+  }
+
+  .scroll-hint::after {
+    content: '';
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+
+  @keyframes fadeUpDown {
+    0%, 100% { opacity: 0.4; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(4px); }
+  }
+
+  /* NAV */
+  .cat-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13,10,7,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    overflow-x: auto;
+    padding: 0 1rem;
+    scrollbar-width: none;
+  }
+  .cat-nav::-webkit-scrollbar { display: none; }
+
+  .cat-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    padding: 1.1rem 1.4rem;
+    cursor: pointer;
+    position: relative;
+    white-space: nowrap;
+    transition: color 0.2s;
+  }
+
+  .cat-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%; right: 50%;
+    height: 1px;
+    background: var(--gold);
+    transition: left 0.25s, right 0.25s;
+  }
+
+  .cat-btn.active, .cat-btn:hover { color: var(--gold); }
+  .cat-btn.active::after { left: 1rem; right: 1rem; }
+
+  /* SECTIONS */
+  .menu-section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 4rem 1.5rem 2rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--border), transparent);
+  }
+  .section-line.right {
+    background: linear-gradient(to left, var(--border), transparent);
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    white-space: nowrap;
+  }
+
+  .section-icon {
+    font-size: 1.1rem;
+    margin-right: 0.4rem;
+  }
+
+  /* ITEMS */
+  .menu-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .menu-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    transition: border-color 0.2s, background 0.2s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .menu-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: var(--gold);
+    transform: scaleY(0);
+    transition: transform 0.25s;
+    transform-origin: bottom;
+  }
+
+  .menu-item:hover {
+    border-color: rgba(201,169,110,0.4);
+    background: #1f1b16;
+  }
+
+  .menu-item:hover::before { transform: scaleY(1); }
+
+  .item-emoji {
+    font-size: 2rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+    filter: saturate(0.9);
+  }
+
+  .item-body { flex: 1; }
+
+  .item-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+    letter-spacing: 0.03em;
+  }
+
+  .item-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+  }
+
+  .item-tags {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0.18rem 0.55rem;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 1px;
+  }
+
+  .tag.chef { border-color: rgba(201,169,110,0.4); color: var(--gold); }
+  .tag.veg { border-color: rgba(100,180,100,0.4); color: #8dc88d; }
+  .tag.hot { border-color: rgba(200,80,80,0.4); color: #d4857a; }
+
+  .item-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--gold);
+    white-space: nowrap;
+    margin-top: 0.1rem;
+    letter-spacing: 0.03em;
+  }
+
+  .price-sub {
+    font-size: 0.6rem;
+    color: var(--muted);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    letter-spacing: 0.1em;
+    text-align: right;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .footer-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.8rem;
+  }
+
+  .footer-info {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    font-size: 0.68rem;
+  }
+
+  /* Hidden */
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="ornament">― Est. 2024 ―</div>
+  <h1 class="hero-name">DAST<span>AR</span>KHAN</h1>
+  <p class="hero-sub" id="hero-sub">Дәстүрлі қазақ асханасы · Алматы</p>
+
+  <div class="lang-toggle">
+    <button class="lang-btn active" onclick="setLang('kk')">ҚАЗ</button>
+    <button class="lang-btn" onclick="setLang('ru')">РУС</button>
+  </div>
+
+  <div class="scroll-hint" id="scroll-hint">Мәзір</div>
+</section>
+
+<!-- NAV -->
+<nav class="cat-nav" id="catNav">
+  <button class="cat-btn active" onclick="scrollTo('starters')" data-label-kk="Салқын тағамдар" data-label-ru="Холодные блюда">Салқын</button>
+  <button class="cat-btn" onclick="scrollTo('soups')" data-label-kk="Сорпалар" data-label-ru="Супы">Сорпа</button>
+  <button class="cat-btn" onclick="scrollTo('main')" data-label-kk="Негізгі тағам" data-label-ru="Основные">Негізгі</button>
+  <button class="cat-btn" onclick="scrollTo('bread')" data-label-kk="Нан & Сусын" data-label-ru="Хлеб & Напитки">Нан</button>
+  <button class="cat-btn" onclick="scrollTo('desserts')" data-label-kk="Тәттілер" data-label-ru="Десерты">Тәтті</button>
+</nav>
+
+<!-- STARTERS -->
+<section class="menu-section" id="starters">
+  <div class="section-header">
+    <div class="section-line"></div>
+    <h2 class="section-title"><span class="section-icon">❄️</span><span class="t" data-kk="Салқын тағамдар" data-ru="Холодные блюда">Салқын тағамдар</span></h2>
+    <div class="section-line right"></div>
+  </div>
+  <div class="menu-grid">
+
+    <div class="menu-item">
+      <div class="item-emoji">🫕</div>
+      <div class="item-body">
+        <div class="item-name"><span class="t" data-kk="Қазы салаты" data-ru="Салат с казы">Қазы салаты</span></div>
+        <div class="item-desc t" data-kk="Дәстүрлі жылқы шұжығы, қызыл пияз, шөп, үй қаймақ сосы" data-ru="Традиционная конская колбаса, красный лук, зелень, домашний соус из сметаны">Дәстүрлі жылқы шұжығы, қызыл пияз, шөп, үй қаймақ сосы</div>
+        <div class="item-tags">
+          <span class="tag chef">Chef's pick</span>
+        </div>
+      </div>
+      <div>
+        <div class="item-price">2 800 ₸</div>
+        <div class="price-sub">180 г</div>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-emoji">🥗</div>
+      <div class="item-body">
+        <div class="item-name"><span class="t" data-kk="Шұжық табақ" data-ru="Мясная тарелка">Шұжық табақ</span></div>
+        <div class="item-desc t" data-kk="Қазы, шұжық, жал-жая, сарымсақ, жаңа піскен нан" data-ru="Казы, шужук, жал-жая, чеснок, свежий хлеб">Қазы, шұжық, жал-жая, сарымсақ, жаңа піскен нан</div>
+        <div class="item-tags">
+          <span class="tag">Signature</span>
+        </div>
+      </div>
+      <div>
+        <div class="item-price">4 500 ₸</div>
+        <div class="price-sub">300 г</div>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-emoji">🥒</div>
+      <div class="item-body">
+        <div class="item-name"><span class="t" data-kk="Дала салаты" data-ru="Степной салат">Дала салаты</span></div>
+        <div class="item-desc t" data-kk="Тазаланған қияр, помидор, жасыл пияз, кинза, зәйтүн майы" data-ru="Свежий огурец, томат, зелёный лук, кинза, оливковое масло">Тазаланған қияр, помидор, жасыл пияз, кинза, зәйтүн майы</div>
+        <div class="item-tags">
+          <span class="tag veg">Vegetarian</span>
+        </div>
+      </div>
+      <div>
+        <div class="item-price">1 600 ₸</div>
+        <div class="price-sub">200 г</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SOUPS -->
+<section class="menu-section" id="soups">
+  <div class="section-header">
+    <div class="section-line"></div>
+    <h2 class="section-title"><span class="section-icon">🍲</span><span class="t" data-kk="Сорпалар" data-ru="Супы">Сорпалар</span></h2>
+    <div class="section-line right"></div>
+  </div>
+  <div class="menu-grid">
+
+    <div class="menu-item">
+      <div class="item-emoji">🍖</div>
+      <div class="item-body">
+        <div class="item-name"><span class="t" data-kk="Сорпа (Ет)" data-ru="Сорпа (Мясная)">Сорпа</span></div>
+        <div class="item-desc t" data-kk="6 сағат қайнатылған сиыр еті сорпасы, ащы бұрыш, кинза" data-ru="Говяжий бульон 6 часов варки, перец чили, кинза">6 сағат қайнатылған сиыр еті сорпасы, ащы бұрыш, кинза</div>
+        <div class="item-tags">
+          <span class="tag chef">Chef's pick</span>
+          <span class="tag hot">Ыстық</span>
+        </div>
+      </div>
+      <div>
+        <div class="item-price">1 900 ₸</div>
+        <div class="price-sub">350 мл</div>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-emoji">🫘</div>
+      <div class="item-body">
+        <div class="item-name"><span class="t" data-kk="Шорпа бұршақпен" data-ru="Шорпа с нутом">Шорпа бұршақпен</span></div>
+        <div class="item-desc t" data-kk="Қой еті, нут, сәбіз, картоп, зиян" data-ru="Баранина, нут, морковь, картофель, зира">Қой еті, нут, сәбіз, картоп, зиян</div>
+        <div class="item-tags">
+          <span class="tag hot">Ыстық</span>
+        </div>
+      </div>
+      <div>
+        <div class="item-price">2 100 ₸</div>
+        <div class="price-sub">400 мл</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MAIN -->
+<section class="menu-section" id="main">
+  <div class="section-header">
+    <div class="section-line"></div>
+    <h2 class="section-title"><span class="section-icon">🍽️</span><span class="t" data-kk="Негізгі тағам" data-ru="Основные блюда">Негізгі тағам</span></h2>
+    <div class="section-line right"></div>
+  </div>
+  <div class="menu-grid">
+
+    <div class="menu-item">
+      <div class="item-emoji">🥩</div>
+      <div class="item-body">
+        <div class="item-name"><span class="t" data-kk="Бесбармақ (Классикалық)" data-ru="Бешбармак (Классический)">Бесбармақ</span></div>
+        <div class="item-desc t" data-kk="Жылқы және қой еті, үй жасалған кеспе, пияз, сорпа, шөп" data-ru="Конина и баранина, домашняя лапша, лук, бульон, зелень">Жылқы және қой еті, үй жасалған кеспе, пияз, сорпа, шөп</div>
+        <div class="item-tags">
+          <span class="tag chef">Chef's pick</span>
+          <span class="tag">Signature</span>
+        </div>
+      </div>
+      <div>
+        <div class="item-price">5 800 ₸</div>
+        <div class="price-sub">500 г</div>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-emoji">🫔</div>
+      <div class="item-body">
+        <div class="item-name"><span class="t" data-kk="Манты (10 дана)" data-ru="Манты (10 шт.)">Манты</span></div>
+        <div class="item-desc t" data-kk="Қой еті, пияз, ащы бұрыш, үй қаймақ және ащы соспен" data-ru="Баранина, лук, перец, со сметаной и острым соусом">Қой еті, пияз, ащы бұрыш, үй қаймақ және ащы соспен</div>
+        <div class="item-tags">
+          <span class="tag hot">Ыстық</span>
+        </div>
+      </div>
+      <div>
+        <div class="item-price">3 200 ₸</div>
+        <div class="price-sub">600 г</div>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-emoji">🥘</div>
+      <div class="item-body">
+        <div class="item-name"><span class="t" data-kk="Куырдақ" data-ru="Куырдак">Куырдақ</span></div>
+        <div class="item-desc t" data-kk="Бауыр, өкпе, жүрек, картоп, пияз, үй тәтті бұрышпен" data-ru="Печень, лёгкое, сердце, картофель, лук, болгарский перец">Бауыр, өкпе, жүрек, картоп, пияз, үй тәтті бұрышпен</div>
+        <div class="item-tags">
+          <span class="tag hot">Ыстық</span>
+        </div>
+      </div>
+      <div>
+        <div class="item-price">2 900 ₸</div>
+        <div class="price-sub">350 г</div>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-emoji">🍢</div>
+      <div class="item-body">
+        <div class="item-name"><span class="t" data-kk="Шашлык (Қой еті)" data-ru="Шашлык (Баранина)">Шашлык</span></div>
+        <div class="item-desc t" data-kk="Маринадталған қой еті, зиян, кориандр, ашытқан пияз" data-ru="Маринованная баранина, зира, кориандр, маринованный лук">Маринадталған қой еті, зиян, кориандр, ашытқан пияз</div>
+        <div class="item-tags">
+          <span class="tag hot">Ыстық</span>
+        </div>
+      </div>
+      <div>
+        <div class="item-price">3 600 ₸</div>
+        <div class="price-sub">300 г</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BREAD & DRINKS -->
+<section class="menu-section" id="bread">
+  <div class="section-header">
+    <div class="section-line"></div>
+    <h2 class="section-title"><span class="section-icon">🫓</span><span class="t" data-kk="Нан & Сусындар" data-ru="Хлеб & Напитки">Нан & Сусындар</span></h2>
+    <div class="section-line right"></div>
+  </div>
+  <div class="menu-grid">
+
+    <div class="menu-item">
+      <div class="item-emoji">🫓</div>
+      <div class="item-body">
+        <div class="item-name"><span class="t" data-kk="Баурсақ" data-ru="Баурсак">Баурсақ</span></div>
+        <div class="item-desc t" data-kk="Дәстүрлі қуырылған нан, бал және қаймақпен" data-ru="Традиционный жареный хлеб с мёдом и сметаной">Дәстүрлі қуырылған нан, бал және қаймақпен</div>
+        <div class="item-tags">
+          <span class="tag veg">Vegetarian</span>
+        </div>
+      </div>
+      <div>
+        <div class="item-price">900 ₸</div>
+        <div class="price-sub">200 г</div>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-emoji">🥛</div>
+      <div class="item-body">
+        <div class="item-name"><span class="t" data-kk="Шұбат" data-ru="Шубат">Шұбат</span></div>
+        <div class="item-desc t" data-kk="Дәстүрлі ашытылған түйе сүті, суытылған" data-ru="Традиционный ферментированный верблюжий кефир, охлаждённый">Дәстүрлі ашытылған түйе сүті, суытылған</div>
+        <div class="item-tags">
+          <span class="tag chef">Traditional</span>
+        </div>
+      </div>
+      <div>
+        <div class="item-price">800 ₸</div>
+        <div class="price-sub">300 мл</div>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-emoji">☕</div>
+      <div class="item-body">
+        <div class="item-name"><span class="t" data-kk="Шай (Сүтпен)" data-ru="Чай (С молоком)">Шай</span></div>
+        <div class="item-desc t" data-kk="Дәстүрлі қара шай, сүт, қант" data-ru="Традиционный чёрный чай с молоком и сахаром">Дәстүрлі қара шай, сүт, қант</div>
+        <div class="item-tags">
+          <span class="tag veg">Vegetarian</span>
+        </div>
+      </div>
+      <div>
+        <div class="item-price">500 ₸</div>
+        <div class="price-sub">400 мл</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- DESSERTS -->
+<section class="menu-section" id="desserts">
+  <div class="section-header">
+    <div class="section-line"></div>
+    <h2 class="section-title"><span class="section-icon">🍯</span><span class="t" data-kk="Тәттілер" data-ru="Десерты">Тәттілер</span></h2>
+    <div class="section-line right"></div>
+  </div>
+  <div class="menu-grid">
+
+    <div class="menu-item">
+      <div class="item-emoji">🍯</div>
+      <div class="item-body">
+        <div class="item-name"><span class="t" data-kk="Чак-чак" data-ru="Чак-чак">Чак-чак</span></div>
+        <div class="item-desc t" data-kk="Балмен шайналған дәстүрлі тәтті, жаңғақ үстінде" data-ru="Традиционное лакомство в мёде с грецкими орехами">Балмен шайналған дәстүрлі тәтті, жаңғақ үстінде</div>
+        <div class="item-tags">
+          <span class="tag veg">Vegetarian</span>
+          <span class="tag chef">Traditional</span>
+        </div>
+      </div>
+      <div>
+        <div class="item-price">1 200 ₸</div>
+        <div class="price-sub">150 г</div>
+      </div>
+    </div>
+
+    <div class="menu-item">
+      <div class="item-emoji">🌸</div>
+      <div class="item-body">
+        <div class="item-name"><span class="t" data-kk="Жент" data-ru="Жент">Жент</span></div>
+        <div class="item-desc t" data-kk="Тарыдан жасалған дәстүрлі тәтті, май және бал" data-ru="Традиционная сладость из проса с маслом и мёдом">Тарыдан жасалған дәстүрлі тәтті, май және бал</div>
+        <div class="item-tags">
+          <span class="tag veg">Vegetarian</span>
+        </div>
+      </div>
+      <div>
+        <div class="item-price">1 000 ₸</div>
+        <div class="price-sub">120 г</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Dastarkhan</div>
+  <div class="t" data-kk="Достарыңызбен бөлісіңіз" data-ru="Поделитесь с друзьями">Достарыңызбен бөлісіңіз</div>
+  <div class="footer-info">
+    <span>📍 <span class="t" data-kk="Алматы, Абай даңғылы 52" data-ru="Алматы, пр. Абая 52">Алматы, Абай даңғылы 52</span></span>
+    <span>📞 +7 (727) 300-00-00</span>
+    <span>⏰ 10:00 – 23:00</span>
+  </div>
+</footer>
+
+<script>
+  let currentLang = 'kk';
+
+  function setLang(lang) {
+    currentLang = lang;
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.lang-btn').forEach(b => {
+      if (b.textContent.toLowerCase().includes(lang === 'kk' ? 'қаз' : 'рус')) b.classList.add('active');
+    });
+    document.querySelectorAll('.t[data-' + lang + ']').forEach(el => {
+      el.textContent = el.dataset[lang];
+    });
+    document.getElementById('hero-sub').textContent = lang === 'kk'
+      ? 'Дәстүрлі қазақ асханасы · Алматы'
+      : 'Традиционная казахская кухня · Алматы';
+    document.getElementById('scroll-hint').textContent = lang === 'kk' ? 'Мәзір' : 'Меню';
+
+    document.querySelectorAll('.cat-btn').forEach(b => {
+      const label = b.dataset['label' + lang.charAt(0).toUpperCase() + lang.slice(1)];
+      if (label) b.textContent = label;
+    });
+  }
+
+  function scrollTo(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  // Highlight nav on scroll
+  const sections = ['starters','soups','main','bread','desserts'];
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const idx = sections.indexOf(e.target.id);
+        document.querySelectorAll('.cat-btn').forEach((b,i) => {
+          b.classList.toggle('active', i === idx);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+</script>
+</body>
+</html>
